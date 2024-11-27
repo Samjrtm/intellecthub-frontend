@@ -378,6 +378,34 @@
                         throw error;
                     }
                 },
+                async updateLessonSpaces(lessonId, spaces) {
+    try {
+        const cleanLessonId = lessonId.toString().replace(/ObjectId\(['"](.+)['"]\)/, '$1');
+        console.log('Updating lesson with ID:', cleanLessonId);
+        console.log('New spaces value:', spaces); // Add this line
+        
+        const response = await fetch(`${this.baseURL}/api/lessons/${cleanLessonId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ spaces: parseInt(spaces) })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Server response:', errorText); // Add this line
+            throw new Error('Failed to update lesson spaces');
+        }
+
+        const updatedLesson = await response.json();
+        console.log('Updated lesson response:', updatedLesson); // Add this line
+        return updatedLesson;
+    } catch (error) {
+        console.error('Error updating lesson spaces:', error);
+        throw error;
+    }
+}
 }
      });
     </script>

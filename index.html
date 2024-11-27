@@ -371,8 +371,36 @@
                 toggleCart() {
                     this.showCart = !this.showCart;
                 },
+                addToCart(lesson) {
+                    if (lesson.spaces > 0) {
+                        this.cartItems.push({...lesson});
+                        lesson.spaces--;
+                    }
+                },
+                removeFromCart(item) {
+                    const index = this.cartItems.indexOf(item);
+                    if (index > -1) {
+                        this.cartItems.splice(index, 1);
+                        const originalLesson = this.lessons.find(l => l.id === item.id);
+                        if (originalLesson) originalLesson.spaces++;
+                    }
+                },
+                validateName() {
+                    this.nameError = !/^[A-Za-z\s]+$/.test(this.customerName);
+                },
+                validatePhone() {
+                    this.phoneError = !/^\d+$/.test(this.customerPhone);
+                },
+                checkout() {
+                    if (this.isCheckoutValid) {
+                        alert('Enrollment successful! Welcome to Intellectual Hub.');
+                        this.cartItems = [];
+                        this.customerName = '';
+                        this.customerPhone = '';
+                        this.showCart = false;
+                    }
+                }
             }
-
         })
     </script>
 </body>

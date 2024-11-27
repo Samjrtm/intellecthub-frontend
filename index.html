@@ -176,7 +176,44 @@
                             </button>
                         </div>
                     </div>
-                    
+
+                    <div class="border-t border-gray-800 pt-8">
+                        <h3 class="text-2xl font-black mb-6 text-blue-500">CUSTOMER INFORMATION</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-blue-400 text-sm uppercase tracking-wider mb-2">
+                                    Full Name
+                                </label>
+                                <input 
+                                    type="text" 
+                                    v-model="customerName"
+                                    @input="validateName"
+                                    class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all"
+                                    :class="{'ring-1 ring-red-500': nameError}"
+                                    placeholder="Enter your name"
+                                >
+                                <p v-if="nameError" class="text-red-500 text-sm mt-2">
+                                    Name must contain letters only
+                                </p>
+                            </div>
+                            <div>
+                                <label class="block text-blue-400 text-sm uppercase tracking-wider mb-2">
+                                    Contact Number
+                                </label>
+                                <input 
+                                    type="tel" 
+                                    v-model="customerPhone"
+                                    @input="validatePhone"
+                                    class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all"
+                                    :class="{'ring-1 ring-red-500': phoneError}"
+                                    placeholder="Enter your phone number"
+                                >
+                                <p v-if="phoneError" class="text-red-500 text-sm mt-2">
+                                    Phone must contain numbers only
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 
                 </div>
            </div>

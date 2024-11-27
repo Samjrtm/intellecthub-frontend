@@ -254,28 +254,47 @@
             },
             computed: {
                 sortedLessons() {
-                    let filtered = this.lessons.filter(lesson => {
-                        return lesson.subject.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                               lesson.location.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                               lesson.time.toLowerCase().includes(this.searchQuery.toLowerCase());
-                    });
-                    
-                    return filtered.sort((a, b) => {
-                        let modifier = this.sortOrder === 'asc' ? 1 : -1;
-                        if (a[this.sortAttribute] < b[this.sortAttribute]) return -1 * modifier;
-                        if (a[this.sortAttribute] > b[this.sortAttribute]) return 1 * modifier;
-                        return 0;
+                    let filteredLessons = this.lessons;
+
+                    if (this.searchQuery) {
+                        const query = this.searchQuery.toLowerCase();
+                        filteredLessons = this.lessons.filter(lesson => {
+                            return (
+                                lesson.subject.toLowerCase().includes(query) ||
+                                lesson.location.toLowerCase().includes(query) ||
+                                lesson.price.toString().includes(query) ||
+                                lesson.spaces.toString().includes(query) ||
+                                lesson.time.toLowerCase().includes(query)
+                            );
+                        });
+                    }
+
+                    return filteredLessons.sort((a, b) => {
+                        let comparison = 0;
+
+                        switch(this.sortAttribute) {
+                            case 'subject':
+                            case 'location':
+                                comparison = a[this.sortAttribute].localeCompare(b[this.sortAttribute]);
+                                break;
+
+                            case 'price':
+                            case 'spaces':
+                                comparison = a[this.sortAttribute] - b[this.sortAttribute];
+                                break;
+                        }
+
+                        return this.sortOrder === 'asc' ? comparison : -comparison;
                     });
                 },
                 cartTotal() {
                     return this.cartItems.reduce((total, item) => total + item.price, 0);
-                },
+                }
             },
             methods: {
                 toggleCart() {
                     this.showCart = !this.showCart;
                 },
-
                 async fetchAllLessons() {
     try {
         const response = await fetch(`${this.baseURL}/api/lessons`);
@@ -302,14 +321,20 @@
                     if (index > -1) {
                         this.cartItems.splice(index, 1);
                         const originalLesson = this.lessons.find(l => l.id === item.id);
-                        if (originalLesson) originalLesson.spaces++;
+                        if (originalLesson) {
+                            originalLesson.spaces++;
+                        }
                     }
                 },
                 validateName() {
-                    this.nameError = !/^[A-Za-z\s]+$/.test(this.customerName);
+                    const nameRegex = /^[A-Za-z\s]+$/;
+                    this.nameError = !nameRegex.test(this.customerName);
+                    this.updateCheckoutValidity();
                 },
                 validatePhone() {
-                    this.phoneError = !/^\d+$/.test(this.customerPhone);
+                    const phoneRegex = /^[0-9]+$/;
+                    this.phoneError = !phoneRegex.test(this.customerPhone);
+                    this.updateCheckoutValidity();
                 },
                 updateCheckoutValidity() {
                     this.isCheckoutValid = 
@@ -328,6 +353,7 @@
         lessonIds: this.cartItems.map(item => item._id),
         spaces: this.cartItems.length
     };
+
     try {
         await this.saveOrder(orderData);
         
@@ -355,10 +381,8 @@
         console.error('Error during checkout:', error);
         alert('There was an error processing your order. Please try again.');
     }
-                
-    },
-
-    async saveOrder(orderData) {
+},
+                                async saveOrder(orderData) {
                     try {
                         const response = await fetch(`${this.baseURL}/api/orders`, {
                             method: 'POST',
@@ -378,7 +402,8 @@
                         throw error;
                     }
                 },
-                async updateLessonSpaces(lessonId, spaces) {
+              // Modify updateLessonSpaces to add more debug logging
+async updateLessonSpaces(lessonId, spaces) {
     try {
         const cleanLessonId = lessonId.toString().replace(/ObjectId\(['"](.+)['"]\)/, '$1');
         console.log('Updating lesson with ID:', cleanLessonId);
@@ -406,11 +431,11 @@
         throw error;
     }
 }
-},
-created() {
+            },
+            created() {
                 this.fetchAllLessons();
             }
-     });
+        });
     </script>
 </body>
 </html>

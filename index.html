@@ -4,8 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Intellect-Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.js"></script>
 </head>
 <body>
-    
+    <div id="app" class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+        <nav class="bg-black text-white p-6 mb-8 sticky top-0 z-50 shadow-2xl border-b-2 border-blue-600">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-3xl font-black tracking-tight bg-gradient-to-r from-blue-500 to-blue-700 text-transparent bg-clip-text">
+                    Intellect-Hub
+                </h1>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <span 
+                            class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            {{cartItems.length}}
+                        </span>
+                        <button
+                            @click="toggleCart"
+                            :disabled="cartItems.length === 0"
+                            class="bg-blue-600 text-white px-6 py-2 hover:bg-blue-700 transition-all disabled:bg-gray-800 disabled:cursor-not-allowed group">
+                            <i class="fas fa-shopping-cart mr-2 group-hover:animate-bounce"></i>
+                            {{showCart ? 'View Training' : 'View Cart'}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
 </body>
 </html>

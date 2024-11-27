@@ -311,17 +311,53 @@
                 validatePhone() {
                     this.phoneError = !/^\d+$/.test(this.customerPhone);
                 },
-                checkout() {
-                    if (this.isCheckoutValid) {
-                        alert('Enrollment successful! Welcome to Intellectual Hub.');
-                        this.cartItems = [];
-                        this.customerName = '';
-                        this.customerPhone = '';
-                        this.showCart = false;
-                    }
-                }
+                updateCheckoutValidity() {
+                    this.isCheckoutValid = 
+                        this.customerName.length > 0 && 
+                        this.customerPhone.length > 0 && 
+                        !this.nameError && 
+                        !this.phoneError &&
+                        this.cartItems.length > 0;
+                },
+                async checkout() {
+    if (!this.isCheckoutValid) return;
+
+    const orderData = {
+        name: this.customerName,
+        phoneNumber: this.customerPhone,
+        lessonIds: this.cartItems.map(item => item._id),
+        spaces: this.cartItems.length
+    };
+    try {
+        await this.saveOrder(orderData);
+        
+        // Update each lesson's spaces
+        for (const item of this.cartItems) {
+            const lessonToUpdate = this.lessons.find(l => l._id === item._id);
+            if (lessonToUpdate) {
+                console.log('Current spaces before update:', lessonToUpdate.spaces); // Debug log
+                await this.updateLessonSpaces(
+                    item._id,
+                    lessonToUpdate.spaces // Use the current spaces from the lesson
+                );
             }
-        });
+        }
+        
+        // Refresh the lessons data after successful checkout
+        await this.fetchAllLessons(); // Add this line
+        
+        alert(`Thank you ${this.customerName}! Your order has been submitted successfully.\nTotal: $${this.cartTotal}`);
+        this.cartItems = [];
+        this.customerName = '';
+        this.customerPhone = '';
+        this.showCart = false;
+    } catch (error) {
+        console.error('Error during checkout:', error);
+        alert('There was an error processing your order. Please try again.');
+    }
+                
+    },
+     });
     </script>
 </body>
 </html>

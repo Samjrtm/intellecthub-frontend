@@ -88,6 +88,51 @@
                         <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-500"></i>
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+                    <div 
+                        v-for="lesson in sortedLessons"
+                        class="group bg-gray-900 hover:bg-black transition-all duration-300 hover:scale-105 transform-gpu border-l-4 border-blue-600">
+                        <div class="p-8 relative">
+                            <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="bg-blue-600 text-white px-3 py-1 text-xs uppercase tracking-wider">
+                                    Featured
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mb-6">
+                                <i :class="['fas', lesson.icon, 'text-4xl text-blue-500 transition-transform group-hover:scale-110']"></i>
+                                <span 
+                                    :class="['px-4 py-1.5 text-sm uppercase tracking-wider', 
+                                        lesson.spaces > 3 ? 'bg-green-600 text-white' : 
+                                        lesson.spaces > 0 ? 'bg-yellow-600 text-white' : 
+                                        'bg-red-600 text-white']">
+                                    {{lesson.spaces}} spots left
+                                </span>
+                            </div>
+                            <h3 class="text-2xl font-black mb-4 text-white group-hover:text-blue-500 transition-colors">{{lesson.subject}}</h3>
+                            <div class="space-y-4 text-sm text-gray-400">
+                                <p class="flex items-center">
+                                    <i class="fas fa-map-marker-alt mr-3 text-blue-500"></i>
+                                    {{lesson.location}}
+                                </p>
+                                <p class="flex items-center">
+                                    <i class="fas fa-clock mr-3 text-blue-500"></i>
+                                    {{lesson.time}}
+                                </p>
+                                <p class="flex items-center text-xl text-white">
+                                    <i class="fas fa-dollar-sign mr-3 text-blue-500"></i>
+                                    {{lesson.price}}
+                                </p>
+                            </div>
+                            <button 
+                                @click="addToCart(lesson)"
+                                :disabled="lesson.spaces === 0"
+                                class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white p-4 text-sm uppercase tracking-wider font-bold transition-all disabled:bg-gray-700 disabled:cursor-not-allowed">
+                                {{lesson.spaces === 0 ? 'SOLD OUT' : 'ENROLL NOW'}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
            </div>
         </main>
     </div>

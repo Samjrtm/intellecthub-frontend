@@ -32,9 +32,9 @@
                 </div>
             </div>
         </nav>
-
+    
         <main class="container mx-auto px-4 pb-12">
-           <div v-if = "!showCart">
+            <div v-if="!showCart">
                 <div class="mb-8 bg-gray-900 text-white p-8 relative overflow-hidden border-l-4 border-blue-600">
                     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-800"></div>
                     <h2 class="text-2xl font-black mb-6 text-blue-500">AVAILABLE CLASSES</h2>
@@ -78,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-6 relative"></div>
+                    <div class="mt-6 relative">
                         <input 
                             type="text" 
                             v-model="searchQuery" 
@@ -88,7 +88,7 @@
                         <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-500"></i>
                     </div>
                 </div>
-
+    
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
                     <div 
                         v-for="lesson in sortedLessons"
@@ -133,21 +133,20 @@
                         </div>
                     </div>
                 </div>
-           </div>
-
-           <div v-else class="bg-gray-900 text-white p-8 max-w-4xl mx-auto relative border-l-4 border-blue-600">
+            </div>
+    
+            <div v-else class="bg-gray-900 text-white p-8 max-w-4xl mx-auto relative border-l-4 border-blue-600">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-800"></div>
-                <h2 class="text-3xl font-black mb-8 text-blue-500 flex items-center"></h2>
+                <h2 class="text-3xl font-black mb-8 text-blue-500 flex items-center">
                     ENROLLMENT CART
                     <span class="ml-4 bg-blue-600 text-white text-base px-3 py-1">
                         {{cartItems.length}} Programs
                     </span>
                 </h2>
-
-                <div v-if="cartItems.length === 0" class="text-center py-12 text-gray-500"></div>
+                
+                <div v-if="cartItems.length === 0" class="text-center py-12 text-gray-500">
                     Your cart is empty
                 </div>
-
                 <div v-else>
                     <div class="space-y-6 mb-8">
                         <div 
@@ -176,9 +175,9 @@
                             </button>
                         </div>
                     </div>
-
+    
                     <div class="border-t border-gray-800 pt-8">
-                        <h3 class="text-2xl font-black mb-6 text-blue-500">CUSTOMER INFORMATION</h3>
+                        <h3 class="text-2xl font-black mb-6 text-blue-500">TRAINEE INFORMATION</h3>
                         <div class="space-y-6">
                             <div>
                                 <label class="block text-blue-400 text-sm uppercase tracking-wider mb-2">
@@ -214,7 +213,7 @@
                             </div>
                         </div>
                     </div>
-
+    
                     <div class="mt-8 flex justify-between items-center">
                         <div class="text-3xl font-black text-blue-500 flex items-center">
                             Total: 
@@ -231,14 +230,14 @@
                         </button>
                     </div>
                 </div>
-           </div>
+            </div>
         </main>
     </div>
 
     <script>
         new Vue({
             el: '#app',
-            data:{
+            data: {
                 showCart: false,
                 sortAttribute: 'subject',
                 sortOrder: 'asc',
@@ -247,8 +246,8 @@
                 customerPhone: '',
                 nameError: false,
                 phoneError: false,
-                lessons:[
-                {
+                lessons: [
+                    {
                         id: 1,
                         subject: "Strength Training",
                         location: "Main Gym",
@@ -341,7 +340,7 @@
                 ],
                 cartItems: []
             },
-            computed:{
+            computed: {
                 sortedLessons() {
                     let filtered = this.lessons.filter(lesson => {
                         return lesson.subject.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
@@ -401,7 +400,7 @@
                     }
                 }
             }
-        })
+        });
     </script>
 </body>
 </html>

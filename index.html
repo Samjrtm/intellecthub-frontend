@@ -238,16 +238,19 @@
         new Vue({
             el: '#app',
             data: {
-                showCart: false,
+                selectedSubject: '',
                 sortAttribute: 'subject',
                 sortOrder: 'asc',
+                showCart: false,
                 searchQuery: '',
+                cartItems: [],
+                lessons: [],
                 customerName: '',
                 customerPhone: '',
                 nameError: false,
                 phoneError: false,
-                lessons: [],
-                cartItems: []
+                isCheckoutValid: false,
+                baseURL: 'https://express-app-1-fd0a.onrender.com'
             },
             computed: {
                 sortedLessons() {
@@ -267,18 +270,27 @@
                 cartTotal() {
                     return this.cartItems.reduce((total, item) => total + item.price, 0);
                 },
-                isCheckoutValid() {
-                    return this.cartItems.length > 0 && 
-                           this.customerName && 
-                           this.customerPhone && 
-                           !this.nameError && 
-                           !this.phoneError;
-                }
             },
             methods: {
                 toggleCart() {
                     this.showCart = !this.showCart;
                 },
+
+                async fetchAllLessons() {
+    try {
+        const response = await fetch(`${this.baseURL}/api/lessons`);
+        if (response.ok) {
+            const lessons = await response.json();
+            console.log('Fetched lessons:', lessons); // Add this line
+            this.lessons = lessons;
+        } else {
+            const errorText = await response.text();
+            console.error('Failed to fetch lessons:', errorText);
+        }
+    } catch (error) {
+        console.error('Error fetching lessons:', error);
+    }
+},
                 addToCart(lesson) {
                     if (lesson.spaces > 0) {
                         this.cartItems.push({...lesson});

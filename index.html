@@ -52,6 +52,31 @@
                                 <option value="spaces">Available Spaces</option>
                             </select>
                         </div>
+                        <div>
+                            <label class="block text-blue-400 text-sm uppercase tracking-wider mb-2">
+                                Order:
+                            </label>
+                            <div class="flex gap-8">
+                                <label class="flex items-center cursor-pointer group">
+                                    <input 
+                                        type="radio" 
+                                        v-model="sortOrder" 
+                                        value="asc"
+                                        class="mr-2 text-blue-600 focus:ring-blue-500">
+                                    <span class="group-hover:text-blue-500 transition-colors">Ascending</span>
+                                    <i class="fas fa-arrow-up ml-1 text-blue-500"></i>
+                                </label>
+                                <label class="flex items-center cursor-pointer group">
+                                    <input 
+                                        type="radio" 
+                                        v-model="sortOrder" 
+                                        value="desc"
+                                        class="mr-2 text-blue-600 focus:ring-blue-500">
+                                    <span class="group-hover:text-blue-500 transition-colors">Descending</span>
+                                    <i class="fas fa-arrow-down ml-1 text-blue-500"></i>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
            </div>

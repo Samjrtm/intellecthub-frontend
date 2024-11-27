@@ -356,7 +356,23 @@
                         return 0;
                     });
                 },
+                cartTotal() {
+                    return this.cartItems.reduce((total, item) => total + item.price, 0);
+                },
+                isCheckoutValid() {
+                    return this.cartItems.length > 0 && 
+                           this.customerName && 
+                           this.customerPhone && 
+                           !this.nameError && 
+                           !this.phoneError;
+                }
+            },
+            methods: {
+                toggleCart() {
+                    this.showCart = !this.showCart;
+                },
             }
+
         })
     </script>
 </body>

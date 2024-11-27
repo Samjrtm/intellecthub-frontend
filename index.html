@@ -234,5 +234,113 @@
            </div>
         </main>
     </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data:{
+                showCart: false,
+                sortAttribute: 'subject',
+                sortOrder: 'asc',
+                searchQuery: '',
+                customerName: '',
+                customerPhone: '',
+                nameError: false,
+                phoneError: false,
+                lessons:[
+                {
+                        id: 1,
+                        subject: "Strength Training",
+                        location: "Main Gym",
+                        price: 45,
+                        spaces: 5,
+                        icon: "fa-dumbbell",
+                        time: "Monday 6:00 AM"
+                    },
+                    {
+                        id: 2,
+                        subject: "MMA Fundamentals",
+                        location: "Combat Zone",
+                        price: 55,
+                        spaces: 8,
+                        icon: "fa-hand-fist",
+                        time: "Tuesday 7:00 PM"
+                    },
+                    {
+                        id: 3,
+                        subject: "Tactical Shooting",
+                        location: "Range 1",
+                        price: 75,
+                        spaces: 3,
+                        icon: "fa-bullseye",
+                        time: "Wednesday 4:00 PM"
+                    },
+                    {
+                        id: 4,
+                        subject: "CrossFit",
+                        location: "Training Yard",
+                        price: 40,
+                        spaces: 6,
+                        icon: "fa-person-running",
+                        time: "Thursday 5:30 AM"
+                    },
+                    {
+                        id: 5,
+                        subject: "Boxing",
+                        location: "Ring Area",
+                        price: 50,
+                        spaces: 4,
+                        icon: "fa-boxing-glove",
+                        time: "Friday 6:00 PM"
+                    },
+                    {
+                        id: 6,
+                        subject: "Survival Skills",
+                        location: "Outdoor Field",
+                        price: 65,
+                        spaces: 7,
+                        icon: "fa-campground",
+                        time: "Saturday 8:00 AM"
+                    },
+                    {
+                        id: 7,
+                        subject: "Powerlifting",
+                        location: "Weight Room",
+                        price: 45,
+                        spaces: 0,
+                        icon: "fa-weight-hanging",
+                        time: "Monday 7:00 PM"
+                    },
+                    {
+                        id: 8,
+                        subject: "Brazilian Jiu-Jitsu",
+                        location: "Dojo",
+                        price: 60,
+                        spaces: 9,
+                        icon: "fa-users",
+                        time: "Tuesday 6:00 PM"
+                    },
+                    {
+                        id: 9,
+                        subject: "Obstacle Course",
+                        location: "Training Ground",
+                        price: 55,
+                        spaces: 12,
+                        icon: "fa-bars-progress",
+                        time: "Thursday 5:00 PM"
+                    },
+                    {
+                        id: 10,
+                        subject: "Military Fitness",
+                        location: "Drill Ground",
+                        price: 45,
+                        spaces: 2,
+                        icon: "fa-helmet-safety",
+                        time: "Friday 5:30 AM"
+                    }
+                ]
+            }
+        })
+    </script>
 </body>
 </html>

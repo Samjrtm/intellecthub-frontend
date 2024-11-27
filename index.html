@@ -1,441 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Intellect-Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.js"></script>
-</head>
-<body>
-    <div id="app" class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
-        <nav class="bg-black text-white p-6 mb-8 sticky top-0 z-50 shadow-2xl border-b-2 border-blue-600">
-            <div class="container mx-auto flex justify-between items-center">
-                <h1 class="text-3xl font-black tracking-tight bg-gradient-to-r from-blue-500 to-blue-700 text-transparent bg-clip-text">
-                    Intellect-Hub
-                </h1>
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
-                        <span 
-                            class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                            {{cartItems.length}}
-                        </span>
-                        <button
-                            @click="toggleCart"
-                            :disabled="cartItems.length === 0"
-                            class="bg-blue-600 text-white px-6 py-2 hover:bg-blue-700 transition-all disabled:bg-gray-800 disabled:cursor-not-allowed group">
-                            <i class="fas fa-shopping-cart mr-2 group-hover:animate-bounce"></i>
-                            {{showCart ? 'View Training' : 'View Cart'}}
-                        </button>
-                    </div>
-                </div>
+  </head>
+  <body>
+    <div
+      id="app"
+      class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800"
+    >
+      <nav
+        class="bg-black text-white p-6 mb-8 sticky top-0 z-50 shadow-2xl border-b-2 border-blue-600"
+      >
+        <div class="container mx-auto flex justify-between items-center">
+          <h1
+            class="text-3xl font-black tracking-tight bg-gradient-to-r from-blue-500 to-blue-700 text-transparent bg-clip-text"
+          >
+            Intellect-Hub
+          </h1>
+          <div class="flex items-center space-x-4">
+            <div class="relative">
+              <span
+                class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+              >
+                {{cartItems.length}}
+              </span>
+              <button
+                @click="toggleCart"
+                :disabled="cartItems.length === 0"
+                class="bg-blue-600 text-white px-6 py-2 hover:bg-blue-700 transition-all disabled:bg-gray-800 disabled:cursor-not-allowed group"
+              >
+                <i
+                  class="fas fa-shopping-cart mr-2 group-hover:animate-bounce"
+                ></i>
+                {{showCart ? 'View Training' : 'View Cart'}}
+              </button>
             </div>
-        </nav>
-    
-        <main class="container mx-auto px-4 pb-12">
-            <div v-if="!showCart">
-                <div class="mb-8 bg-gray-900 text-white p-8 relative overflow-hidden border-l-4 border-blue-600">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-800"></div>
-                    <h2 class="text-2xl font-black mb-6 text-blue-500">AVAILABLE CLASSES</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <label class="block text-blue-400 text-sm uppercase tracking-wider mb-2">
-                                Sort by:
-                            </label>
-                            <select 
-                                v-model="sortAttribute"
-                                class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all">
-                                <option value="subject">Subject</option>
-                                <option value="location">Location</option>
-                                <option value="price">Price</option>
-                                <option value="spaces">Available Spaces</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-blue-400 text-sm uppercase tracking-wider mb-2">
-                                Order:
-                            </label>
-                            <div class="flex gap-8">
-                                <label class="flex items-center cursor-pointer group">
-                                    <input 
-                                        type="radio" 
-                                        v-model="sortOrder" 
-                                        value="asc"
-                                        class="mr-2 text-blue-600 focus:ring-blue-500">
-                                    <span class="group-hover:text-blue-500 transition-colors">Ascending</span>
-                                    <i class="fas fa-arrow-up ml-1 text-blue-500"></i>
-                                </label>
-                                <label class="flex items-center cursor-pointer group">
-                                    <input 
-                                        type="radio" 
-                                        v-model="sortOrder" 
-                                        value="desc"
-                                        class="mr-2 text-blue-600 focus:ring-blue-500">
-                                    <span class="group-hover:text-blue-500 transition-colors">Descending</span>
-                                    <i class="fas fa-arrow-down ml-1 text-blue-500"></i>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-6 relative">
-                        <input 
-                            type="text" 
-                            v-model="searchQuery" 
-                            placeholder="Search programs..."
-                            class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all pr-10"
-                        >
-                        <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-500"></i>
-                    </div>
+          </div>
+        </div>
+      </nav>
+
+      <main class="container mx-auto px-4 pb-12">
+        <div v-if="!showCart">
+          <div
+            class="mb-8 bg-gray-900 text-white p-8 relative overflow-hidden border-l-4 border-blue-600"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-800"
+            ></div>
+            <h2 class="text-2xl font-black mb-6 text-blue-500">
+              AVAILABLE CLASSES
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <label
+                  class="block text-blue-400 text-sm uppercase tracking-wider mb-2"
+                >
+                  Sort by:
+                </label>
+                <select
+                  v-model="sortAttribute"
+                  class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all"
+                >
+                  <option value="subject">Subject</option>
+                  <option value="location">Location</option>
+                  <option value="price">Price</option>
+                  <option value="spaces">Available Spaces</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  class="block text-blue-400 text-sm uppercase tracking-wider mb-2"
+                >
+                  Order:
+                </label>
+                <div class="flex gap-8">
+                  <label class="flex items-center cursor-pointer group">
+                    <input
+                      type="radio"
+                      v-model="sortOrder"
+                      value="asc"
+                      class="mr-2 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span class="group-hover:text-blue-500 transition-colors"
+                      >Ascending</span
+                    >
+                    <i class="fas fa-arrow-up ml-1 text-blue-500"></i>
+                  </label>
+                  <label class="flex items-center cursor-pointer group">
+                    <input
+                      type="radio"
+                      v-model="sortOrder"
+                      value="desc"
+                      class="mr-2 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span class="group-hover:text-blue-500 transition-colors"
+                      >Descending</span
+                    >
+                    <i class="fas fa-arrow-down ml-1 text-blue-500"></i>
+                  </label>
                 </div>
-    
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
-                    <div 
-                        v-for="lesson in sortedLessons"
-                        class="group bg-gray-900 hover:bg-black transition-all duration-300 hover:scale-105 transform-gpu border-l-4 border-blue-600">
-                        <div class="p-8 relative">
-                            <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div class="bg-blue-600 text-white px-3 py-1 text-xs uppercase tracking-wider">
-                                    Featured
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-between mb-6">
-                                <i :class="['fas', lesson.icon, 'text-4xl text-blue-500 transition-transform group-hover:scale-110']"></i>
-                                <span 
-                                    :class="['px-4 py-1.5 text-sm uppercase tracking-wider', 
+              </div>
+            </div>
+            <div class="mt-6 relative">
+              <input
+                type="text"
+                v-model="searchQuery"
+                placeholder="Search programs..."
+                class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all pr-10"
+              />
+              <i
+                class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-500"
+              ></i>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+            <div
+              v-for="lesson in sortedLessons"
+              class="group bg-gray-900 hover:bg-black transition-all duration-300 hover:scale-105 transform-gpu border-l-4 border-blue-600"
+            >
+              <div class="p-8 relative">
+                <div
+                  class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <div
+                    class="bg-blue-600 text-white px-3 py-1 text-xs uppercase tracking-wider"
+                  >
+                    Featured
+                  </div>
+                </div>
+                <div class="flex items-center justify-between mb-6">
+                  <i
+                    :class="['fas', lesson.icon, 'text-4xl text-blue-500 transition-transform group-hover:scale-110']"
+                  ></i>
+                  <span
+                    :class="['px-4 py-1.5 text-sm uppercase tracking-wider', 
                                         lesson.spaces > 3 ? 'bg-green-600 text-white' : 
                                         lesson.spaces > 0 ? 'bg-yellow-600 text-white' : 
-                                        'bg-red-600 text-white']">
-                                    {{lesson.spaces}} spots left
-                                </span>
-                            </div>
-                            <h3 class="text-2xl font-black mb-4 text-white group-hover:text-blue-500 transition-colors">{{lesson.subject}}</h3>
-                            <div class="space-y-4 text-sm text-gray-400">
-                                <p class="flex items-center">
-                                    <i class="fas fa-map-marker-alt mr-3 text-blue-500"></i>
-                                    {{lesson.location}}
-                                </p>
-                                <p class="flex items-center">
-                                    <i class="fas fa-clock mr-3 text-blue-500"></i>
-                                    {{lesson.time}}
-                                </p>
-                                <p class="flex items-center text-xl text-white">
-                                    <i class="fas fa-dollar-sign mr-3 text-blue-500"></i>
-                                    {{lesson.price}}
-                                </p>
-                            </div>
-                            <button 
-                                @click="addToCart(lesson)"
-                                :disabled="lesson.spaces === 0"
-                                class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white p-4 text-sm uppercase tracking-wider font-bold transition-all disabled:bg-gray-700 disabled:cursor-not-allowed">
-                                {{lesson.spaces === 0 ? 'SOLD OUT' : 'ENROLL NOW'}}
-                            </button>
-                        </div>
-                    </div>
+                                        'bg-red-600 text-white']"
+                  >
+                    {{lesson.spaces}} spots left
+                  </span>
                 </div>
+                <h3
+                  class="text-2xl font-black mb-4 text-white group-hover:text-blue-500 transition-colors"
+                >
+                  {{lesson.subject}}
+                </h3>
+                <div class="space-y-4 text-sm text-gray-400">
+                  <p class="flex items-center">
+                    <i class="fas fa-map-marker-alt mr-3 text-blue-500"></i>
+                    {{lesson.location}}
+                  </p>
+                  <p class="flex items-center">
+                    <i class="fas fa-clock mr-3 text-blue-500"></i>
+                    {{lesson.time}}
+                  </p>
+                  <p class="flex items-center text-xl text-white">
+                    <i class="fas fa-dollar-sign mr-3 text-blue-500"></i>
+                    {{lesson.price}}
+                  </p>
+                </div>
+                <button
+                  @click="addToCart(lesson)"
+                  :disabled="lesson.spaces === 0"
+                  class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white p-4 text-sm uppercase tracking-wider font-bold transition-all disabled:bg-gray-700 disabled:cursor-not-allowed"
+                >
+                  {{lesson.spaces === 0 ? 'SOLD OUT' : 'ENROLL NOW'}}
+                </button>
+              </div>
             </div>
-    
-            <div v-else class="bg-gray-900 text-white p-8 max-w-4xl mx-auto relative border-l-4 border-blue-600">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-800"></div>
-                <h2 class="text-3xl font-black mb-8 text-blue-500 flex items-center">
-                    ENROLLMENT CART
-                    <span class="ml-4 bg-blue-600 text-white text-base px-3 py-1">
-                        {{cartItems.length}} Programs
-                    </span>
-                </h2>
-                
-                <div v-if="cartItems.length === 0" class="text-center py-12 text-gray-500">
-                    Your cart is empty
+          </div>
+        </div>
+
+        <div
+          v-else
+          class="bg-gray-900 text-white p-8 max-w-4xl mx-auto relative border-l-4 border-blue-600"
+        >
+          <div
+            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-blue-800"
+          ></div>
+          <h2 class="text-3xl font-black mb-8 text-blue-500 flex items-center">
+            ENROLLMENT CART
+            <span class="ml-4 bg-blue-600 text-white text-base px-3 py-1">
+              {{cartItems.length}} Programs
+            </span>
+          </h2>
+
+          <div
+            v-if="cartItems.length === 0"
+            class="text-center py-12 text-gray-500"
+          >
+            Your cart is empty
+          </div>
+          <div v-else>
+            <div class="space-y-6 mb-8">
+              <div
+                v-for="item in cartItems"
+                class="border-b border-gray-800 py-6 flex justify-between items-center group"
+              >
+                <div>
+                  <h3
+                    class="font-black text-xl mb-3 group-hover:text-blue-500 transition-colors"
+                  >
+                    {{item.subject}}
+                  </h3>
+                  <p class="text-gray-400 flex items-center mb-2">
+                    <i class="fas fa-map-marker-alt mr-3 text-blue-500"></i>
+                    {{item.location}}
+                  </p>
+                  <p class="text-gray-400 flex items-center mb-2">
+                    <i class="fas fa-clock mr-3 text-blue-500"></i>
+                    {{item.time}}
+                  </p>
+                  <p class="text-blue-500 text-xl flex items-center">
+                    <i class="fas fa-dollar-sign mr-3"></i>
+                    {{item.price}}
+                  </p>
                 </div>
-                <div v-else>
-                    <div class="space-y-6 mb-8">
-                        <div 
-                            v-for="item in cartItems"
-                            class="border-b border-gray-800 py-6 flex justify-between items-center group">
-                            <div>
-                                <h3 class="font-black text-xl mb-3 group-hover:text-blue-500 transition-colors">{{item.subject}}</h3>
-                                <p class="text-gray-400 flex items-center mb-2">
-                                    <i class="fas fa-map-marker-alt mr-3 text-blue-500"></i>
-                                    {{item.location}}
-                                </p>
-                                <p class="text-gray-400 flex items-center mb-2">
-                                    <i class="fas fa-clock mr-3 text-blue-500"></i>
-                                    {{item.time}}
-                                </p>
-                                <p class="text-blue-500 text-xl flex items-center">
-                                    <i class="fas fa-dollar-sign mr-3"></i>
-                                    {{item.price}}
-                                </p>
-                            </div>
-                            <button 
-                                @click="removeFromCart(item)"
-                                class="text-red-500 hover:text-white px-4 py-2 hover:bg-red-600 transition-colors">
-                                <i class="fas fa-times mr-2"></i>
-                                Remove
-                            </button>
-                        </div>
-                    </div>
-    
-                    <div class="border-t border-gray-800 pt-8">
-                        <h3 class="text-2xl font-black mb-6 text-blue-500">TRAINEE INFORMATION</h3>
-                        <div class="space-y-6">
-                            <div>
-                                <label class="block text-blue-400 text-sm uppercase tracking-wider mb-2">
-                                    Full Name
-                                </label>
-                                <input 
-                                    type="text" 
-                                    v-model="customerName"
-                                    @input="validateName"
-                                    class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all"
-                                    :class="{'ring-1 ring-red-500': nameError}"
-                                    placeholder="Enter your name"
-                                >
-                                <p v-if="nameError" class="text-red-500 text-sm mt-2">
-                                    Name must contain letters only
-                                </p>
-                            </div>
-                            <div>
-                                <label class="block text-blue-400 text-sm uppercase tracking-wider mb-2">
-                                    Contact Number
-                                </label>
-                                <input 
-                                    type="tel" 
-                                    v-model="customerPhone"
-                                    @input="validatePhone"
-                                    class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all"
-                                    :class="{'ring-1 ring-red-500': phoneError}"
-                                    placeholder="Enter your phone number"
-                                >
-                                <p v-if="phoneError" class="text-red-500 text-sm mt-2">
-                                    Phone must contain numbers only
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div class="mt-8 flex justify-between items-center">
-                        <div class="text-3xl font-black text-blue-500 flex items-center">
-                            Total: 
-                            <span class="ml-4  text-white px-4 py-2">
-                                ${{cartTotal}}
-                            </span>
-                        </div>
-                        <button 
-                            @click="checkout"
-                            :disabled="!isCheckoutValid"
-                            class="bg-blue-600 text-white px-8 py-4 text-sm uppercase tracking-wider font-bold hover:bg-blue-700 transition-all disabled:bg-gray-800 disabled:cursor-not-allowed group">
-                            COMPLETE ENROLLMENT
-                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"></i>
-                        </button>
-                    </div>
-                </div>
+                <button
+                  @click="removeFromCart(item)"
+                  class="text-red-500 hover:text-white px-4 py-2 hover:bg-red-600 transition-colors"
+                >
+                  <i class="fas fa-times mr-2"></i>
+                  Remove
+                </button>
+              </div>
             </div>
-        </main>
+
+            <div class="border-t border-gray-800 pt-8">
+              <h3 class="text-2xl font-black mb-6 text-blue-500">
+                TRAINEE INFORMATION
+              </h3>
+              <div class="space-y-6">
+                <div>
+                  <label
+                    class="block text-blue-400 text-sm uppercase tracking-wider mb-2"
+                  >
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    v-model="customerName"
+                    @input="validateName"
+                    class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all"
+                    :class="{'ring-1 ring-red-500': nameError}"
+                    placeholder="Enter your name"
+                  />
+                  <p v-if="nameError" class="text-red-500 text-sm mt-2">
+                    Name must contain letters only
+                  </p>
+                </div>
+                <div>
+                  <label
+                    class="block text-blue-400 text-sm uppercase tracking-wider mb-2"
+                  >
+                    Contact Number
+                  </label>
+                  <input
+                    type="tel"
+                    v-model="customerPhone"
+                    @input="validatePhone"
+                    class="bg-gray-800 border-2 border-blue-600 text-white p-3 w-full focus:ring-2 focus:ring-blue-500 transition-all"
+                    :class="{'ring-1 ring-red-500': phoneError}"
+                    placeholder="Enter your phone number"
+                  />
+                  <p v-if="phoneError" class="text-red-500 text-sm mt-2">
+                    Phone must contain numbers only
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8 flex justify-between items-center">
+              <div class="text-3xl font-black text-blue-500 flex items-center">
+                Total:
+                <span class="ml-4 text-white px-4 py-2"> ${{cartTotal}} </span>
+              </div>
+              <button
+                @click="checkout"
+                :disabled="!isCheckoutValid"
+                class="bg-blue-600 text-white px-8 py-4 text-sm uppercase tracking-wider font-bold hover:bg-blue-700 transition-all disabled:bg-gray-800 disabled:cursor-not-allowed group"
+              >
+                COMPLETE ENROLLMENT
+                <i
+                  class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition-transform"
+                ></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                selectedSubject: '',
-                sortAttribute: 'subject',
-                sortOrder: 'asc',
-                showCart: false,
-                searchQuery: '',
-                cartItems: [],
-                lessons: [],
-                customerName: '',
-                customerPhone: '',
-                nameError: false,
-                phoneError: false,
-                isCheckoutValid: false,
-                baseURL: 'https://intellecthub-backend-3.onrender.com'
-            },
-            computed: {
-                sortedLessons() {
-                    let filteredLessons = this.lessons;
+      new Vue({
+        el: "#app",
+        data: {
+          selectedSubject: "",
+          sortAttribute: "subject",
+          sortOrder: "asc",
+          showCart: false,
+          searchQuery: "",
+          cartItems: [],
+          lessons: [],
+          customerName: "",
+          customerPhone: "",
+          nameError: false,
+          phoneError: false,
+          isCheckoutValid: false,
+          baseURL: "https://intellecthub-backend-3.onrender.com",
+        },
+        computed: {
+          sortedLessons() {
+            let filteredLessons = this.lessons;
 
-                    if (this.searchQuery) {
-                        const query = this.searchQuery.toLowerCase();
-                        filteredLessons = this.lessons.filter(lesson => {
-                            return (
-                                lesson.subject.toLowerCase().includes(query) ||
-                                lesson.location.toLowerCase().includes(query) ||
-                                lesson.price.toString().includes(query) ||
-                                lesson.spaces.toString().includes(query) ||
-                                lesson.time.toLowerCase().includes(query)
-                            );
-                        });
-                    }
+            if (this.searchQuery) {
+              const query = this.searchQuery.toLowerCase();
+              filteredLessons = this.lessons.filter((lesson) => {
+                return (
+                  lesson.subject.toLowerCase().includes(query) ||
+                  lesson.location.toLowerCase().includes(query) ||
+                  lesson.price.toString().includes(query) ||
+                  lesson.spaces.toString().includes(query) ||
+                  lesson.time.toLowerCase().includes(query)
+                );
+              });
+            }
 
-                    return filteredLessons.sort((a, b) => {
-                        let comparison = 0;
+            return filteredLessons.sort((a, b) => {
+              let comparison = 0;
 
-                        switch(this.sortAttribute) {
-                            case 'subject':
-                            case 'location':
-                                comparison = a[this.sortAttribute].localeCompare(b[this.sortAttribute]);
-                                break;
+              switch (this.sortAttribute) {
+                case "subject":
+                case "location":
+                  comparison = a[this.sortAttribute].localeCompare(
+                    b[this.sortAttribute]
+                  );
+                  break;
 
-                            case 'price':
-                            case 'spaces':
-                                comparison = a[this.sortAttribute] - b[this.sortAttribute];
-                                break;
-                        }
+                case "price":
+                case "spaces":
+                  comparison = a[this.sortAttribute] - b[this.sortAttribute];
+                  break;
+              }
 
-                        return this.sortOrder === 'asc' ? comparison : -comparison;
-                    });
-                },
-                cartTotal() {
-                    return this.cartItems.reduce((total, item) => total + item.price, 0);
-                }
-            },
-            methods: {
-                toggleCart() {
-                    this.showCart = !this.showCart;
-                },
-                async fetchAllLessons() {
-    try {
-        const response = await fetch(`${this.baseURL}/api/lessons`);
-        if (response.ok) {
-            const lessons = await response.json();
-            console.log('Fetched lessons:', lessons); // Add this line
-            this.lessons = lessons;
-        } else {
-            const errorText = await response.text();
-            console.error('Failed to fetch lessons:', errorText);
-        }
-    } catch (error) {
-        console.error('Error fetching lessons:', error);
-    }
-},
-                addToCart(lesson) {
-                    if (lesson.spaces > 0) {
-                        this.cartItems.push({...lesson});
-                        lesson.spaces--;
-                    }
-                },
-                removeFromCart(item) {
-                    const index = this.cartItems.indexOf(item);
-                    if (index > -1) {
-                        this.cartItems.splice(index, 1);
-                        const originalLesson = this.lessons.find(l => l.id === item.id);
-                        if (originalLesson) {
-                            originalLesson.spaces++;
-                        }
-                    }
-                },
-                validateName() {
-                    const nameRegex = /^[A-Za-z\s]+$/;
-                    this.nameError = !nameRegex.test(this.customerName);
-                    this.updateCheckoutValidity();
-                },
-                validatePhone() {
-                    const phoneRegex = /^[0-9]+$/;
-                    this.phoneError = !phoneRegex.test(this.customerPhone);
-                    this.updateCheckoutValidity();
-                },
-                updateCheckoutValidity() {
-                    this.isCheckoutValid = 
-                        this.customerName.length > 0 && 
-                        this.customerPhone.length > 0 && 
-                        !this.nameError && 
-                        !this.phoneError &&
-                        this.cartItems.length > 0;
-                },
-                async checkout() {
-    if (!this.isCheckoutValid) return;
+              return this.sortOrder === "asc" ? comparison : -comparison;
+            });
+          },
+          cartTotal() {
+            return this.cartItems.reduce(
+              (total, item) => total + item.price,
+              0
+            );
+          },
+        },
+        methods: {
+          toggleCart() {
+            this.showCart = !this.showCart;
+          },
+          async fetchAllLessons() {
+            try {
+              const response = await fetch(`${this.baseURL}/api/lessons`);
+              if (response.ok) {
+                const lessons = await response.json();
+                console.log("Fetched lessons:", lessons); // Add this line
+                this.lessons = lessons;
+              } else {
+                const errorText = await response.text();
+                console.error("Failed to fetch lessons:", errorText);
+              }
+            } catch (error) {
+              console.error("Error fetching lessons:", error);
+            }
+          },
+          addToCart(lesson) {
+            if (lesson.spaces > 0) {
+              this.cartItems.push({ ...lesson });
+              lesson.spaces--;
+            }
+          },
+          removeFromCart(item) {
+            const index = this.cartItems.indexOf(item);
+            if (index > -1) {
+              this.cartItems.splice(index, 1);
+              const originalLesson = this.lessons.find((l) => l.id === item.id);
+              if (originalLesson) {
+                originalLesson.spaces++;
+              }
+            }
+          },
+          validateName() {
+            const nameRegex = /^[A-Za-z\s]+$/;
+            this.nameError = !nameRegex.test(this.customerName);
+            this.updateCheckoutValidity();
+          },
+          validatePhone() {
+            const phoneRegex = /^[0-9]+$/;
+            this.phoneError = !phoneRegex.test(this.customerPhone);
+            this.updateCheckoutValidity();
+          },
+          updateCheckoutValidity() {
+            this.isCheckoutValid =
+              this.customerName.length > 0 &&
+              this.customerPhone.length > 0 &&
+              !this.nameError &&
+              !this.phoneError &&
+              this.cartItems.length > 0;
+          },
+          async checkout() {
+            if (!this.isCheckoutValid) return;
 
-    const orderData = {
-        name: this.customerName,
-        phoneNumber: this.customerPhone,
-        lessonIds: this.cartItems.map(item => item._id),
-        spaces: this.cartItems.length
-    };
+            const orderData = {
+              name: this.customerName,
+              phoneNumber: this.customerPhone,
+              lessonIds: this.cartItems.map((item) => item._id),
+              spaces: this.cartItems.length,
+            };
 
-    try {
-        await this.saveOrder(orderData);
-        
-        // Update each lesson's spaces
-        for (const item of this.cartItems) {
-            const lessonToUpdate = this.lessons.find(l => l._id === item._id);
-            if (lessonToUpdate) {
-                console.log('Current spaces before update:', lessonToUpdate.spaces); // Debug log
-                await this.updateLessonSpaces(
+            try {
+              await this.saveOrder(orderData);
+
+              // Update each lesson's spaces
+              for (const item of this.cartItems) {
+                const lessonToUpdate = this.lessons.find(
+                  (l) => l._id === item._id
+                );
+                if (lessonToUpdate) {
+                  console.log(
+                    "Current spaces before update:",
+                    lessonToUpdate.spaces
+                  ); // Debug log
+                  await this.updateLessonSpaces(
                     item._id,
                     lessonToUpdate.spaces // Use the current spaces from the lesson
-                );
+                  );
+                }
+              }
+
+              // Refresh the lessons data after successful checkout
+              await this.fetchAllLessons(); // Add this line
+
+              alert(
+                `Thank you ${this.customerName}! Your order has been submitted successfully.\nTotal: $${this.cartTotal}`
+              );
+              this.cartItems = [];
+              this.customerName = "";
+              this.customerPhone = "";
+              this.showCart = false;
+            } catch (error) {
+              console.error("Error during checkout:", error);
+              alert(
+                "There was an error processing your order. Please try again."
+              );
             }
-        }
-        
-        // Refresh the lessons data after successful checkout
-        await this.fetchAllLessons(); // Add this line
-        
-        alert(`Thank you ${this.customerName}! Your order has been submitted successfully.\nTotal: $${this.cartTotal}`);
-        this.cartItems = [];
-        this.customerName = '';
-        this.customerPhone = '';
-        this.showCart = false;
-    } catch (error) {
-        console.error('Error during checkout:', error);
-        alert('There was an error processing your order. Please try again.');
-    }
-},
-                                async saveOrder(orderData) {
-                    try {
-                        const response = await fetch(`${this.baseURL}/api/orders`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(orderData)
-                        });
-
-                        if (!response.ok) {
-                            throw new Error('Failed to save order');
-                        }
-
-                        return await response.json();
-                    } catch (error) {
-                        console.error('Error saving order:', error);
-                        throw error;
-                    }
+          },
+          async saveOrder(orderData) {
+            try {
+              const response = await fetch(`${this.baseURL}/api/orders`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
                 },
-              // Modify updateLessonSpaces to add more debug logging
-async updateLessonSpaces(lessonId, spaces) {
-    try {
-        const cleanLessonId = lessonId.toString().replace(/ObjectId\(['"](.+)['"]\)/, '$1');
-        console.log('Updating lesson with ID:', cleanLessonId);
-        console.log('New spaces value:', spaces); // Add this line
-        
-        const response = await fetch(`${this.baseURL}/api/lessons/${cleanLessonId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ spaces: parseInt(spaces) })
-        });
+                body: JSON.stringify(orderData),
+              });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Server response:', errorText); // Add this line
-            throw new Error('Failed to update lesson spaces');
-        }
+              if (!response.ok) {
+                throw new Error("Failed to save order");
+              }
 
-        const updatedLesson = await response.json();
-        console.log('Updated lesson response:', updatedLesson); // Add this line
-        return updatedLesson;
-    } catch (error) {
-        console.error('Error updating lesson spaces:', error);
-        throw error;
-    }
-}
-            },
-            created() {
-                this.fetchAllLessons();
+              return await response.json();
+            } catch (error) {
+              console.error("Error saving order:", error);
+              throw error;
             }
-        });
+          },
+          // Modify updateLessonSpaces to add more debug logging
+          async updateLessonSpaces(lessonId, spaces) {
+            try {
+              const cleanLessonId = lessonId
+                .toString()
+                .replace(/ObjectId\(['"](.+)['"]\)/, "$1");
+              console.log("Updating lesson with ID:", cleanLessonId);
+              console.log("New spaces value:", spaces); // Add this line
+
+              const response = await fetch(
+                `${this.baseURL}/api/lessons/${cleanLessonId}`,
+                {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ spaces: parseInt(spaces) }),
+                }
+              );
+
+              if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Server response:", errorText); // Add this line
+                throw new Error("Failed to update lesson spaces");
+              }
+
+              const updatedLesson = await response.json();
+              console.log("Updated lesson response:", updatedLesson); // Add this line
+              return updatedLesson;
+            } catch (error) {
+              console.error("Error updating lesson spaces:", error);
+              throw error;
+            }
+          },
+        },
+        created() {
+          this.fetchAllLessons();
+        },
+      });
     </script>
-</body>
+  </body>
 </html>

@@ -138,9 +138,8 @@
                   </div>
                 </div>
                 <div class="flex items-center justify-between mb-6">
-                  <i
-                    :class="['fas', lesson.icon, 'text-4xl text-blue-500 transition-transform group-hover:scale-110']"
-                  ></i>
+                    <img :src="`${baseURL}${lesson.icon}`" :alt="lesson.subject" class="w-12 h-12 object-cover">
+
                   <span
                     :class="['px-4 py-1.5 text-sm uppercase tracking-wider', 
                                         lesson.spaces > 3 ? 'bg-green-600 text-white' : 
